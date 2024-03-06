@@ -1,0 +1,9 @@
+torch
+deepspeed
+accelerate
+transformers
+wandb
+scipy
+flash_attn
+datasets
+sentencepiece
