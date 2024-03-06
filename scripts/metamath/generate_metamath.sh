@@ -14,7 +14,7 @@ accelerate launch \
   --metric_output_dir eval_results/metamath/generator \
   --target_set train_500 \
   --n_solutions ${n_solutions} \
-  --batch_size 8 \
+  --batch_size 16 \
   --do_sample True \
   --temperature 0.7 \
   --top_k 50 \

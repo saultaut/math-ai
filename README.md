@@ -1,7 +1,13 @@
 # MATH OVM code - Outcome-supervised Value Models for Planning in Mathematical Reasoning
 
-## Generate verifier training set from MATH dataset
+## Prepare the MetaMath dataset for trainging verifier in correct format
 
+```
+python prepare_metamath_data.py --data_size 1000
+```
+
+
+## Generate training labels for Verifier:
 Run the commands:
 ```
 git clone https://github.com/saultaut/OVM.git
