@@ -24,14 +24,14 @@ accelerate launch \
   train_verifier_metamath.py \
   --model_name_or_path ${checkpoint_dir} \
   --data_dir data/metamath/model_generation \
-  --target_set train_50 \
+  --target_set train_500 \
   --save_dir ${save_dir} \
   --generator_id ${generator_id} \
   --dedup True \
   --per_problem_sampling_solution ${n_solution} \
   --loss_level token \
   --loss_on_llm True \
-  --num_train_epoches 3 \
+  --num_train_epoches 1 \
   --eval_steps 1000 \
   --per_device_train_batch_size 4 \
   --per_device_eval_batch_size 4 \
