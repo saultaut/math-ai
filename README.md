@@ -10,8 +10,8 @@ python prepare_metamath_data.py --data_size 1000
 ## Generate training labels for Verifier:
 Run the commands:
 ```
-git clone https://github.com/saultaut/OVM.git
-cd OVM/
+git clone https://github.com/saultaut/math-ai.git
+cd math-ai/
 pip install -r requirements_runpod.txt
 bash scripts/metamath/generate_metamath.sh
 ```
@@ -28,8 +28,8 @@ python train_verifier_debug_metamath.py
 ## Train Verifier on MetaMath dataset:
 Run the commands:
 ```
-git clone https://github.com/saultaut/OVM.git
-cd OVM/
+git clone https://github.com/saultaut/math-ai.git
+cd math-ai/
 pip install -r requirements_runpod.txt
 bash scripts/metamath/train_verifier_metamath.sh
 ```

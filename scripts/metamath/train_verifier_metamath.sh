@@ -5,7 +5,7 @@ export WANDB_PROJECT=MetaMath-Verifier
 export WANDB_ENTITY=
 
 
-n_solution=2
+n_solution=5
 generator_id=MetaMath-Mistral-7B
 save_verifier_id=n${n_solution}-scahead-mse-lm-token
 
@@ -31,10 +31,10 @@ accelerate launch \
   --per_problem_sampling_solution ${n_solution} \
   --loss_level token \
   --loss_on_llm True \
-  --num_train_epoches 1 \
+  --num_train_epoches 5 \
   --eval_steps 1000 \
-  --per_device_train_batch_size 4 \
-  --per_device_eval_batch_size 4 \
+  --per_device_train_batch_size 8 \
+  --per_device_eval_batch_size 8 \
   --gradient_accumulation_steps 1 \
   --gradient_checkpointing True \
   --learning_rate 1e-5 \
