@@ -18,6 +18,7 @@ from utils.metamath.decoding import extract_answer
 def get_examples(data_dir, split):
     read_file = {
 		'train_500': 'train_500.jsonl',
+        'train_5000': 'train_5000.jsonl',
         'train_50': 'train_50.jsonl',
         'train': 'train.jsonl',
         'test': 'test.jsonl',
