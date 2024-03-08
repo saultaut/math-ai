@@ -35,3 +35,28 @@ bash scripts/metamath/train_verifier_metamath.sh
 ```
 
 Output will be save in `/models/metamath/verifiers/`
+
+
+## Value-Guided Beam Search
+
+```
+git clone https://github.com/saultaut/math-ai.git
+cd math-ai/
+pip install -r requirements_runpod.txt
+
+huggingface-cli login
+huggingface-cli download sauliuz/opt-125mln-verifier/MetaMath-Mistral-7B-1 --local-dir ./models/metamath/verifiers/
+
+
+bash scripts/metamath/train_verifier_metamath.sh
+```
+
+
+## Upload trained verifier to the Hugging Face
+
+```
+huggingface-cli login
+huggingface-cli upload sauliuz/opt-125mln-verifier ./models/metamath/verifiers/ .
+```
+
+This will create a folder in HF with the name of verifier with all required files.
