@@ -10,7 +10,7 @@ generator_id=MetaMath-Mistral-7B
 save_verifier_id=n${n_solution}-scahead-mse-lm-token
 
 
-checkpoint_dir=meta-math/MetaMath-Mistral-7B
+checkpoint_dir=facebook/opt-125m
 
 experimentID=1
 final_id=${generator_id}-${save_verifier_id}
@@ -24,7 +24,7 @@ accelerate launch \
   train_verifier_metamath.py \
   --model_name_or_path ${checkpoint_dir} \
   --data_dir data/metamath/model_generation \
-  --target_set train_50 \
+  --target_set train_500 \
   --save_dir ${save_dir} \
   --generator_id ${generator_id} \
   --dedup True \
