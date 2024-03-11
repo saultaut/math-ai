@@ -45,7 +45,7 @@ cd math-ai/
 pip install -r requirements_runpod.txt
 
 huggingface-cli login
-huggingface-cli download sauliuz/opt-125mln-verifier/MetaMath-Mistral-7B-1 --local-dir ./models/metamath/verifiers/
+huggingface-cli download sauliuz/opt-125mln-verifier --local-dir ./models/metamath/verifiers/
 
 
 bash scripts/metamath/train_verifier_metamath.sh
