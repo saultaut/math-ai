@@ -21,7 +21,7 @@ accelerate launch \
   --model_name_or_path ${model_name_or_path} \
   --dataset metamath \
   --data_dir data/metamath \
-  --target_set train_500 \
+  --target_set train_50 \
   --save_dir ${save_dir} \
   --num_train_epoches 2 \
   --eval_steps 200 \

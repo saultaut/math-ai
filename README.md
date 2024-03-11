@@ -48,7 +48,10 @@ huggingface-cli login
 huggingface-cli download sauliuz/opt-125mln-verifier --local-dir ./models/metamath/verifiers/
 
 
-bash scripts/metamath/train_verifier_metamath.sh
+bash scripts/metamath/eval_step_beam_mistral.sh
+or  
+bash scripts/metamath/eval_step_beam.sh
+
 ```
 
 
