@@ -3,6 +3,21 @@ import pprint
 
 INVALID_ANS = "[invalid]"
 
+
+
+def extract_test_answer(solution):
+    ans = remove_boxed(last_boxed_only_string(solution))
+    return ans
+
+def remove_boxed(s):
+    left = "\\boxed{"
+    try:
+        assert s[:len(left)] == left
+        assert s[-1] == "}"
+        return s[len(left):-1]
+    except:
+        return None
+    
 def extract_answer(completion):
     split_ans = completion.split('The answer is: ')
     if len(split_ans) > 1:

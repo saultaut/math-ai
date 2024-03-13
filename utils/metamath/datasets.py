@@ -11,9 +11,14 @@ import pathlib
 
 from utils.datasets import read_jsonl, get_few_shot_prompt, left_pad_sequences, right_pad_sequences, mask_labels
 from utils.constants import DEFAULT_BOS_TOKEN, DEFAULT_EOS_TOKEN, IGNORE_INDEX
-from utils.metamath.decoding import extract_answer
+from utils.metamath.decoding import extract_answer, extract_test_answer
 
 
+TEST_PROBLEM_PROMPT = (
+        "Below is an instruction that describes a task. "
+        "Write a response that appropriately completes the request.\n\n"
+        "### Instruction:\n{instruction}\n\n### Response: Let's think step by step."
+    )
 
 def get_examples(data_dir, split):
     read_file = {
@@ -35,6 +40,25 @@ def get_examples(data_dir, split):
     print(f"{len(data)} {split} examples")
     return data
 
+
+
+def get_test_examples(data_dir, split):
+    read_file = {
+        'test': 'test.jsonl',
+        'MATH_test_100': 'MATH_test_100.jsonl'
+    }[split]
+    
+    path = os.path.join(data_dir, read_file)
+    examples = read_jsonl(path)
+
+    
+    data = []
+    for ex in examples:
+        temp_instr = TEST_PROBLEM_PROMPT.format(instruction=ex["instruction"])
+        data.append({'question' : temp_instr, 'answer': ex["output"]})
+
+    print(f"{len(data)} {split} examples")
+    return data
 
 
 def make_finetuning_generator_data_module(tokenizer: transformers.PreTrainedTokenizer, data_args: dataclass) -> Dict:
@@ -144,7 +168,7 @@ class TestGeneratorDataset(torch.utils.data.Dataset):
         self.pad_token_id = tokenizer.pad_token_id
 
         print("+ [Dataset] Loading Training Data")
-        self.examples = get_examples(self.data_dir, target_set)
+        self.examples = get_test_examples(self.data_dir, target_set)
         qns_str = [ex["question"] for ex in self.examples]
         ans_str = [ex["answer"] for ex in self.examples]
         

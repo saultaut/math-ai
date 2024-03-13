@@ -4,7 +4,7 @@ compute_environment: LOCAL_MACHINE
 deepspeed_config:
   deepspeed_multinode_launcher: standard
   gradient_clipping: 1.0
-  zero_stage: 2
+  zero_stage: 3
 distributed_type: DEEPSPEED
 downcast_bf16: true
 dynamo_backend: 'NO'
