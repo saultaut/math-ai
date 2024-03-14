@@ -1,5 +1,11 @@
 # MATH OVM code - Outcome-supervised Value Models for Planning in Mathematical Reasoning
 
+
+## Generator
+ Using deepspeed stage 3 with offload to cpu and using 2 x RTX 3090 GPU, I was able to train facebook/opt-2.7B model.
+
+
+
 ## Prepare the MetaMath dataset for trainging verifier in correct format
 
 ```
