@@ -10,7 +10,8 @@ generator_id=MetaMath-Mistral-7B
 save_verifier_id=n${n_solution}-scahead-mse-lm-token
 
 
-checkpoint_dir=meta-math/MetaMath-Mistral-7B
+#checkpoint_dir=meta-math/MetaMath-Mistral-7B
+checkpoint_dir=facebook/opt-2.7b
 
 experimentID=1
 final_id=${generator_id}-${save_verifier_id}
@@ -20,7 +21,7 @@ export WANDB_NAME=${generator_id}-${experimentID}
 
 
 accelerate launch \
-  --config_file ./configs/zero1_metamath.yaml \
+  --config_file ./configs/zero3_mistral.yaml \
   train_verifier_metamath.py \
   --model_name_or_path ${checkpoint_dir} \
   --data_dir data/metamath/model_generation \
@@ -33,8 +34,8 @@ accelerate launch \
   --loss_on_llm True \
   --num_train_epoches 5 \
   --eval_steps 1000 \
-  --per_device_train_batch_size 8 \
-  --per_device_eval_batch_size 8 \
+  --per_device_train_batch_size 4 \
+  --per_device_eval_batch_size 4 \
   --gradient_accumulation_steps 1 \
   --gradient_checkpointing True \
   --learning_rate 1e-5 \
