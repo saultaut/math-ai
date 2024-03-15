@@ -172,7 +172,7 @@ class TestGeneratorDataset(torch.utils.data.Dataset):
         qns_str = [ex["question"] for ex in self.examples]
         ans_str = [ex["answer"] for ex in self.examples]
         
-        gts_str = [extract_answer(ans) for ans in ans_str]
+        gts_str = [extract_test_answer(ans) for ans in ans_str]
 
         print("+ [Dataset] Tokenizing Testing Data")
         qns_tokens = tokenizer(qns_str, padding=False).input_ids
