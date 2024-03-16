@@ -19,7 +19,7 @@ accelerate launch \
   --dataset metamath \
   --data_dir data/metamath \
   --output_dir eval_results/metamath/generator_with_verifier \
-  --target_set train_50 \
+  --target_set test_100 \
   --inference_mode beam \
   --batch_size 8 \
   --vs_batch_size 8 \

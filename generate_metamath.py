@@ -87,6 +87,7 @@ def main():
     elif data_args.dataset == 'metamath':
         from utils.metamath.datasets import make_test_generator_data_module
         from utils.metamath.decoding import extract_answer, get_answer_label
+        from utils.metamath.metrics import GeneratorAnswerAcc, MultiSamplingAnswerAcc
     else:
         raise NotImplementedError
 
@@ -94,14 +95,16 @@ def main():
     accelerator = Accelerator()
     
     model, tokenizer = load_model(model_args)
+
+    # these needs to be replaced to ge the model working again
     dataset = make_test_generator_data_module(tokenizer, data_args, inference_args)
     dataloader = make_testing_dataloader(dataset, batch_size=inference_args.batch_size)
     
     dataloader = accelerator.prepare_data_loader(dataloader, device_placement=False)
 
     sampler = DatasetSampling(accelerator=accelerator, model=model, tokenizer=tokenizer, generation_args=generation_args)
-    # greedy_metric = GeneratorAnswerAcc(n_data=len(dataset))
-    # sampling_metric = MultiSamplingAnswerAcc(n_data=len(dataset))
+    greedy_metric = GeneratorAnswerAcc(n_data=len(dataset))
+    sampling_metric = MultiSamplingAnswerAcc(n_data=len(dataset))
 
 
     response_list = [
@@ -124,14 +127,14 @@ def main():
         progress = tqdm(total=len(dataloader), desc='{}-th/{} solution'.format(i+1, inference_args.n_solutions)) if accelerator.is_main_process else None
 
         all_idxs_list, all_references_list, all_completions_list  =  tuple([] for _ in range(3))
-        # sampling_metric.start_new_sol_epoch()
+        sampling_metric.start_new_sol_epoch()
         for _, batch in enumerate(dataloader):
             idx_list, input_list, reference_list = tuple(batch[k] for k in ('idx', 'input', 'reference'))
 
             completions = sampler.sample(input_list)
             
-            # greedy_metric(completions, reference_list)
-            # sampling_metric(completions, reference_list)
+            greedy_metric(completions, reference_list)
+            sampling_metric(completions, reference_list)
 
             for obj, container in [
                 (idx_list, all_idxs_list), 
@@ -143,7 +146,7 @@ def main():
             if accelerator.is_main_process:
                 progress.update(1)
 
-        # sampling_metric.end_the_sol_epoch()
+        sampling_metric.end_the_sol_epoch()
 
         gc.collect(); torch.cuda.empty_cache()
 
@@ -197,25 +200,25 @@ def main():
             
 
 
-    # # calculate metrics
-    # if inference_args.n_solutions == 1:
-    #     metrics = {
-    #         'accuracy': greedy_metric.get_metric()
-    #     }
-    # else:
-    #     pass_k, acc_majority = sampling_metric.get_metric(inference_args.n_solutions)
-    #     metrics = {
-    #         'multiple guesses': pass_k,
-    #         'self consistency': acc_majority,
-    #     }
-    # accelerator.print(metrics)
+    # calculate metrics
+    if inference_args.n_solutions == 1:
+        metrics = {
+            'accuracy': greedy_metric.get_metric()
+        }
+    else:
+        pass_k, acc_majority = sampling_metric.get_metric(inference_args.n_solutions)
+        metrics = {
+            'multiple guesses': pass_k,
+            'self consistency': acc_majority,
+        }
+    accelerator.print(metrics)
 
 
     # # save metrics
-    # if accelerator.is_main_process:
-    #     os.makedirs(os.path.dirname(metrics_file), exist_ok=True)
-    #     json.dump(metrics, open(metrics_file,'w'), indent=4, ensure_ascii=False)
-    #     print(f"+ [Save] Save Metrics to {metrics_file}")
+    if accelerator.is_main_process:
+        os.makedirs(os.path.dirname(metrics_file), exist_ok=True)
+        json.dump(metrics, open(metrics_file,'w'), indent=4, ensure_ascii=False)
+        print(f"+ [Save] Save Metrics to {metrics_file}")
 
 
 

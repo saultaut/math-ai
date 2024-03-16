@@ -26,7 +26,7 @@ def get_examples(data_dir, split):
         'train_5000': 'train_5000.jsonl',
         'train_50': 'train_50.jsonl',
         'train': 'train.jsonl',
-        'test': 'test.jsonl',
+        'test_100': 'test_100.jsonl',
         'MATH_test_100': 'MATH_test_100.jsonl'
     }[split]
     
@@ -168,11 +168,11 @@ class TestGeneratorDataset(torch.utils.data.Dataset):
         self.pad_token_id = tokenizer.pad_token_id
 
         print("+ [Dataset] Loading Training Data")
-        self.examples = get_test_examples(self.data_dir, target_set)
+        self.examples = get_examples(self.data_dir, target_set)
         qns_str = [ex["question"] for ex in self.examples]
         ans_str = [ex["answer"] for ex in self.examples]
         
-        gts_str = [extract_test_answer(ans) for ans in ans_str]
+        gts_str = [extract_answer(ans) for ans in ans_str]
 
         print("+ [Dataset] Tokenizing Testing Data")
         qns_tokens = tokenizer(qns_str, padding=False).input_ids
