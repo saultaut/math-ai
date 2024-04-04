@@ -4,6 +4,7 @@ This file is used to transoform original MATH test data set to MetaMathQA data s
 
 import json
 import io
+from utils.metamath.decoding import extract_answers, extract_answer, extract_test_answer, get_answer_label
 
 
 def read_jsonl(path: str):
@@ -25,7 +26,7 @@ def jload(f, mode="r"):
     return jdict
 
 
-path ='/content/MATH_test_100.jsonl'
+path ='data/metamath/MATH_test_100.jsonl'
 examples = read_jsonl(path)
 
 data = []
@@ -38,12 +39,34 @@ for ex in examples:
 
 print(f"{len(data)} {path} examples")
 
-##### Save file to correct format
+######### Save file to correct format
 
 data_list = [item for item in data]
 
+save_path = 'data/metamath/test_100.jsonl'
 # Write to a JSONL file
-with open('test_100.jsonl', 'w', encoding='utf-8') as jsonl_file:
+with open(save_path, 'w', encoding='utf-8') as jsonl_file:
     for item in data_list:
         json_string = json.dumps(item, ensure_ascii=False)
         jsonl_file.write(json_string + '\n')
+
+
+
+##################################################################################################
+### Asser that saved file accuracy is 100 %
+##################################################################################################
+
+# load from orignal data format
+ans_str = [ex["output"] for ex in examples]
+gts = [extract_test_answer(ans) for ans in ans_str]
+
+
+### parse formated response
+model_completetions = [ex["response"] for ex in data]
+answers = extract_answers(model_completetions)
+
+corrs = [float(get_answer_label(answer, gt) == True) for answer, gt in zip(answers, gts)]
+
+acc = (sum(corrs) / len(corrs))
+
+print(f'Accuracy: {acc}')
